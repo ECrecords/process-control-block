@@ -1,28 +1,55 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-struct child_proc
+struct list_struct
 {
     /* data */
-    int id;
-    struct child_proc *sib_proc;
+    int process_id;
+    struct list_struct *link;
 };
 
+typedef struct list_struct list_type;
 
-struct parent_proc
+struct pcb_struct
 {
     /* data */
-    int id;
-    struct child_proc *ch_proc;
+    int parent;
+    list_type *children;
 };
 
-typedef struct child_proc child_proc;
-typedef struct parent_proc parent_proc;
+typedef struct pcb_struct pcb_type;
+
+void init_pcb_arr(pcb_type *pcb_arr, int *max_proc)
+{
+    printf("Enter maximum number of processes: ");
+    scanf(" %d", max_proc);
+
+    //pcb_type *probe;
+    pcb_arr = (pcb_type*) malloc( (*max_proc) * sizeof(pcb_type));
+
+    for (int i = 0; i < (*max_proc); i++)
+    {
+        //probe = pcb_arr+i;
+        pcb_arr[i].parent = (i == 0) ?  0 : -1;
+        pcb_arr[i].children = NULL;
+    }
+
+    printf("Process 0 was created as the top-level process\n");
+    return;
+}
+
+void create_child(pcb_type *pcb_arr, int *max_proc)
+{
+
+}
 
 int main(int argc, char const *argv[])
 {
-    short option;
-    parent_proc pcb_arr[5];
+    char option;
+
+    int max_proc;
+    pcb_type *pcb_arr = NULL;
+    
     
     printf( "=================================================\n"
             "Process Creation Hierarchy\n"
@@ -31,35 +58,24 @@ int main(int argc, char const *argv[])
             "\t3) Destroy all descendants of a process\n"
             "\t4) Quit program and free memory\n"
             "=================================================");
-
+    
     while (1)
     {
         printf("\nEnter selection: ");
-        scanf("%d", &option);
+        scanf(" %c", &option);
         
-        if (option == 1)
-        {
+        if (option == '1') {
+            init_pcb_arr(pcb_arr, &max_proc);
+        } else if (option == '2') {
             /* code */
-        } else if (option == 2)
-        {
+        } else if (option == '3') {
             /* code */
-        } else if (option == 3)
-        {
-            /* code */
-        } else if (option == 4)
-        {
+        } else if (option == '4') {
             break;
-        } else
-        {
-            printf("INVALID OPTION");
-        }
-        
-        
-        
-        
-        
+        } else {
+            printf("\nINVALID OPTION");
+        }    
     }
-    
     return 0;
 }
 
